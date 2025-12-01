@@ -28,7 +28,7 @@ export default async function handler(req: any, res: any) {
 
     // completion.choices[0].message.content typically contains the text output
     return res.status(200).json({
-      plan: completion.choices?.[0]?.message?.content ?? ""
+      plan: completion.choices[0].message.content || "{}" ?? ""
     });
   } catch (error) {
     console.error("Groq error:", error);
