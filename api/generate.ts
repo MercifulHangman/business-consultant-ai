@@ -1,6 +1,6 @@
 import Groq from "groq-sdk";
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
   }
@@ -15,21 +15,31 @@ export default async function handler(req: any, res: any) {
       messages: [
         {
           role: "system",
-          content:
-            "You are a professional business plan generator. Produce a JSON object with fields: companyName, executiveSummary, missionStatement, objectives (array), marketAnalysis (object with targetAudience, marketSize, competitors array), swot (object of arrays), marketingStrategy, operationalPlan, financialForecast (array of {category, year1, year2, year3}), investmentRequirements (array), roiAnalysis, riskAssessment (array of {risk, mitigation, impact}). Provide values in Uzbek where possible."
+          content: `
+You are a professional business analyst.  
+ALWAYS respond STRICTLY in valid JSON.  
+NO explanation, NO text outside JSON, NO comments, NO markdown.  
+Just return a JSON object with the business plan.
+          `
         },
-        {
-          role: "user",
-          content: JSON.stringify(input)
-        }
+        { role: "user", content: JSON.stringify(input) }
       ],
-      temperature: 0.25
+      temperature: 0.3
     });
 
-    // completion.choices[0].message.content typically contains the text output
-    return res.status(200).json({
-      plan: completion.choices[0].message.content || "{}" ?? ""
-    });
+    let raw = completion.choices[0].message.content;
+
+    // Make sure it's valid JSON
+    raw = raw.trim();
+    if (!raw.startsWith("{")) {
+      raw = raw.substring(raw.indexOf("{"));
+    }
+    if (!raw.endsWith("}")) {
+      raw = raw.substring(0, raw.lastIndexOf("}") + 1);
+    }
+
+    return res.status(200).json({ plan: raw });
+
   } catch (error) {
     console.error("Groq error:", error);
     return res.status(500).json({ error: "AI generation failed" });
