@@ -46,11 +46,12 @@ export default function App() {
   const parsed = JSON.parse(data.plan);
   setPlan(parsed);
 } catch (err) {
-  console.error("JSON parse error:", err, data.plan);
+  console.error(...);
   setPlan(data.plan);
-} catch (e) {
-    console.error("JSON parse error:", e, data.plan);
-    alert("AI returned invalid JSON: check console");
+}
+} catch (e) {         // ❌ EXTRA, INVALID, BROKEN, VERCEL FAILS HERE
+  console.error(...);
+  alert(...);
 } catch {
         setPlan(data.plan);
       }
