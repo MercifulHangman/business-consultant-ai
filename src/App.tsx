@@ -42,13 +42,13 @@ export default function App() {
 
       const data = await res.json();
       // Groq returns plan as a string; if it is a JSON string, parse, otherwise keep
-      try {
+    try {
   const parsed = JSON.parse(data.plan);
   setPlan(parsed);
 } catch (err) {
-  console.error(...);
+  console.error("JSON parse error:", err, data.plan);
+  alert("AI returned invalid JSON: check console");
   setPlan(data.plan);
-}
 } catch (e) {         // ❌ EXTRA, INVALID, BROKEN, VERCEL FAILS HERE
   console.error(...);
   alert(...);
