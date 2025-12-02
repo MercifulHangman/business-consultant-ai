@@ -41,15 +41,14 @@ export default function App() {
       }
 
       const data = await res.json();
-      // Groq returns plan as a string; if it is JSON string, parse, otherwise keep
+      // Groq returns plan as a string; if it is a JSON string, parse, otherwise keep
       try {
   const parsed = JSON.parse(data.plan);
   setPlan(parsed);
 } catch (err) {
   console.error("JSON parse error:", err, data.plan);
   setPlan(data.plan);
-}
-catch (e) {
+} catch (e) {
     console.error("JSON parse error:", e, data.plan);
     alert("AI returned invalid JSON: check console");
 } catch {
