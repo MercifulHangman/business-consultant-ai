@@ -49,9 +49,6 @@ export default function App() {
   console.error("JSON parse error:", err, data.plan);
   alert("AI returned invalid JSON: check console");
   setPlan(data.plan);
-} catch (e) {         // ❌ EXTRA, INVALID, BROKEN, VERCEL FAILS HERE
-  console.error(...);
-  alert(...);
 } catch {
         setPlan(data.plan);
       }
